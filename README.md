@@ -6,4 +6,4 @@ Generate a poster from your last.fm history. Inspired by [scatter.fm](https://sc
 ## Usage
 Download your last.fm user data [here](https://mainstream.ghan.nl/export.html) and the run `poster.py`.
 
-Requires installation of `vpype`.
+Requires installation of `svgwrite`.
