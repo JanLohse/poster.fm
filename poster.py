@@ -1,7 +1,8 @@
+import math
 import svgwrite
 import csv
 import os
-import coloria
+import colour
 from datetime import datetime
 
 
@@ -36,7 +37,11 @@ def entry_to_time(entry):
 
 def entry_to_color(entry, start_date, end_date, artists):
     if entry[2] not in artists:
-        artists[entry[2]] = None
+        date_progress = (entry_to_date(entry) - start_date) / (end_date - start_date)
+        h = H_MIN + (H_MAX - H_MIN) * date_progress
+        a = C * math.cos(math.pi/180 * h)
+        b = C * math.sin(math.pi/180 * h)
+        artists[entry[2]] = colour.XYZ_to_sRGB(colour.Oklab_to_XYZ([L, a, b]))
     return artists[entry[2]]
 
 
@@ -52,9 +57,8 @@ def generate_poster(src):
         entries = [None] + list(csv.reader(file))[1:] + [None]
         start_date = entry_to_date(entries[-2])
         end_date = entry_to_date(entries[1])
-        for i in range(1, len(entries) - 1):
+        for i in range(len(entries) - 2, 1, -1):
             add_entry(dwg, entries[i-1], entries[i], entries[i+1], start_date, end_date, artists)
-            break
     dwg.save()
 
 
