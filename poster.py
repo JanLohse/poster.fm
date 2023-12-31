@@ -22,8 +22,8 @@ H_MAX = 320
 B_COLOR = None
 
 # line setup
-DURATION_BASE = 5
-DURATION_MAX = 5
+DURATION_BASE = 7
+DURATION_MAX = 15
 LINE_EXPANSION = 1.3
 CORNER_RADIUS = .3
 
@@ -56,7 +56,7 @@ def add_entry(pdf, previous, current, successor, start_date, end_date, artists):
     if previous and entry_to_date(previous) == current_date and current_start - entry_to_minutes(
             previous) <= DURATION_MAX:
         pass  # TODO: no start cap
-    if successor and entry_to_date(current) == current_date and entry_to_minutes(
+    if successor and entry_to_date(current) == current_date and 0 <= entry_to_minutes(
             successor) - current_start <= DURATION_MAX:
         current_end = entry_to_minutes(successor)
         # TODO: no end cap
@@ -66,6 +66,8 @@ def add_entry(pdf, previous, current, successor, start_date, end_date, artists):
     w = GRAPH_WIDTH / ((end_date - start_date).days + 1)
     h = GRAPH_HEIGHT * (current_end - current_start) / 1440
     pdf.set_fill_color(color)
+    if h < 0:
+        print(x, y, w, h)
     pdf.rect(x=x, y=y, w=w, h=h, style='F')
 
 
